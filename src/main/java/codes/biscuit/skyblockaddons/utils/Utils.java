@@ -26,10 +26,13 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.MetadataCollection;
 import net.minecraftforge.fml.common.ModMetadata;
+import net.minecraftforge.fml.common.versioning.ComparableVersion;
 import net.minecraftforge.fml.relauncher.CoreModManager;
 import net.minecraftforge.fml.relauncher.FMLInjectionData;
 import net.minecraftforge.fml.relauncher.FileListHelper;
@@ -257,6 +260,27 @@ public class Utils {
     }
 
     public void checkUpdates() {
+        ForgeVersion.CheckResult checkResult = ForgeVersion.getResult(Loader.instance().activeModContainer());
+        FMLLog.info("%1$s", checkResult.toString());
+
+        if (checkResult.status.equals(ForgeVersion.Status.OUTDATED)) {
+            main.getRenderListener().getDownloadInfo().setPatch(true);
+            main.getRenderListener().getDownloadInfo().setMessageType(EnumUtils.UpdateMessageType.PATCH_AVAILABLE);
+            sendUpdateMessage(true,true);
+        }
+        else if (checkResult.status.equals(ForgeVersion.Status.BETA)) {
+            main.getRenderListener().getDownloadInfo().setMessageType(EnumUtils.UpdateMessageType.DEVELOPMENT);
+        }
+        else if (checkResult.status.equals(ForgeVersion.Status.BETA_OUTDATED)) {
+            // Show message for new beta available
+        }
+        else if (checkResult.status.equals(ForgeVersion.Status.PENDING)) {
+            // Check again in a bit
+        }
+        else if (checkResult.status.equals(ForgeVersion.Status.FAILED)) {
+            sendErrorMessage("Update check failed!");
+        }
+
         new Thread(() -> {
             try {
                 URL url = new URL("https://raw.githubusercontent.com/biscuut/SkyblockAddons/master/build.gradle");
