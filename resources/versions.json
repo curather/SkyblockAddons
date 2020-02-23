@@ -1,0 +1,12 @@
+{
+  "homepage": "https://biscuit.codes/mods/skyblockaddons/",
+  "promos": {
+    "1.8.9-latest": "1.5.0-b5",
+    "1.8.9-recommended": "1.4.2"
+  },
+  "1.8.9": {
+    "1.5.0-b5": "Bug Fixes\nThis build does not contain the discord feature.\n- Fixed crash when checking rarity of an item that doesn't have any NBT tags\n- Fix checking rarity for items where rarity isn't in the last line of the lore (the mod shouldn't ask you to confirm selling common items anymore)\n- Fix copying item NBT crashing when given an item with no NBT data\n- Stop blocking sale of items without a rarity\n- Fix grammar with the \"click more times to confirm drop\" message when just one more click is required",
+    "1.5.0-b4.1": "Discord Rich Presence!\nThis build adds support for Discord Rich Presence, so if you're using the Discord Desktop Client and have this enabled, you'll be shown as 'Playing Skyblock' with some customizable extra information. To customize those click the gear button on the Discord Rich Presence feature and cycle through the options. Some show dynamic information, some are just generic text. If you have ideas for more options, leave them in #beta-tester-chat \nThe location icons are still being worked on by the Hypixel Packs HQ team and not all are done yet, so you may find yourself in regions without an icon.\n\nNote: This feature is developed on a different branch than the other beta versions, so while this build contains all previous beta builds, future beta builds might not contain the Discord feature. That's why this is version 1.5.0-b4.1\n\nFixes\n- Fixed a crash when dropping items outside Skyblock",
+    "1.4.2": "Changes/Fixes:\n* Fixed big lag issue that had to do with the mana and health bars.\n* New setting to disable the message shown when using the stems/deep caverns ores features.\n* Added Maddox Batphone to the item cooldowns feature.\n* Remove tabs for the gui, add search bar to the gui. Ordered features alphabetically.\n* Fixed bars not rendering while riding a horse.\n* Fixed kick bug when taking off tarantula helmet in skyblock.\n* Fixed language reverting to english after restarting the game sometimes.\n\n* Added new feature that only allows you to mine value ores in the nether.\n* Added feature to hide pet hearts while riding an animal or using the skyblock launchpads.\n"
+  }
+}

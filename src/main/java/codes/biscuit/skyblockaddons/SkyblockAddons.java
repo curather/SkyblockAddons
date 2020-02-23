@@ -27,12 +27,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 @Getter
-@Mod(modid = SkyblockAddons.MOD_ID, version = SkyblockAddons.VERSION, name = SkyblockAddons.MOD_NAME, clientSideOnly = true, acceptedMinecraftVersions = "[1.8.9]")
+@Mod(modid = SkyblockAddons.MOD_ID, version = SkyblockAddons.VERSION, name = SkyblockAddons.MOD_NAME, clientSideOnly = true, acceptedMinecraftVersions = "[1.8.9]", updateJSON = SkyblockAddons.UPDATE_JSON)
 public class SkyblockAddons {
 
     static final String MOD_ID = "skyblockaddons";
     public static final String MOD_NAME = "SkyblockAddons";
     public static final String VERSION = "1.5.0-b5";
+    public static final String UPDATE_JSON = "https://raw.githubusercontent.com/BiscuitDevelopment/SkyblockAddons/update-checker/resources/versions.json";
 
     /** The main instance of the mod, used mainly my mixins who don't get it passed to them. */
     @Getter private static SkyblockAddons instance;
