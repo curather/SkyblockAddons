@@ -333,7 +333,7 @@ public class EnumUtils {
         DOWNLOADING(UPDATE_MESSAGE_DOWNLOAD),
         FAILED(UPDATE_MESSAGE_FAILED),
         DOWNLOAD_FINISHED(UPDATE_MESSAGE_DOWNLOAD_FINISHED),
-        DEVELOPMENT(null);
+        DEVELOPMENT(MESSAGE_BETA_NOTICE);
 
         private Message message;
 
@@ -342,12 +342,7 @@ public class EnumUtils {
         }
 
         public String[] getMessages(String... variables) {
-            String messageText;
-            if (this == DEVELOPMENT) {
-                messageText = "You are running a development version: " + SkyblockAddons.VERSION + ". Please report any bugs that haven't been found yet. Thank you.";
-            } else {
-                messageText = message.getMessage(variables);
-            }
+            String messageText = message.getMessage(variables);
 
             // Wrap around the text, replace the carriage returns, and split at the new lines.
             return WordUtils.wrap(messageText, 36).replace("\r", "").split(Pattern.quote("\n"));

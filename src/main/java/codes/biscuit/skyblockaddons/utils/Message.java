@@ -4,6 +4,7 @@ import codes.biscuit.skyblockaddons.SkyblockAddons;
 import codes.biscuit.skyblockaddons.utils.nifty.ChatFormatting;
 import com.google.gson.JsonObject;
 import lombok.Getter;
+import net.minecraftforge.fml.common.Loader;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -136,6 +137,7 @@ public enum Message {
     MESSAGE_CHOOSE_A_COLOR(MessageObject.MESSAGES, "chooseAColor"),
     MESSAGE_SELECTED_COLOR(MessageObject.MESSAGES, "selectedColor"),
     MESSAGE_SET_HEX_COLOR(MessageObject.MESSAGES, "setHexColor"),
+    MESSAGE_BETA_NOTICE(MessageObject.MESSAGES, "betaNotice"),
 
     @Deprecated ANCHOR_POINT_TOP_LEFT(MessageObject.ANCHOR_POINT, "topLeft"),
     @Deprecated ANCHOR_POINT_TOP_RIGHT(MessageObject.ANCHOR_POINT, "topRight"),
@@ -143,6 +145,7 @@ public enum Message {
     @Deprecated ANCHOR_POINT_BOTTOM_RIGHT(MessageObject.ANCHOR_POINT, "bottomRight"),
     @Deprecated ANCHOR_POINT_HEALTH_BAR(MessageObject.ANCHOR_POINT, "healthBar"),
 
+    UPDATE_MESSAGE_BETA(MessageObject.UPDATE_MESSAGES, "betaAvailable"),
     UPDATE_MESSAGE_MAJOR(MessageObject.UPDATE_MESSAGES, "majorAvailable"),
     UPDATE_MESSAGE_PATCH(MessageObject.UPDATE_MESSAGES, "patchAvailable"),
     UPDATE_MESSAGE_DOWNLOAD(MessageObject.UPDATE_MESSAGES, "downloading"),
@@ -210,6 +213,8 @@ public enum Message {
                     text = text.replace("%uses%", main.getConfigValues().getRestrictedColor(Feature.SHOW_ITEM_ANVIL_USES)+variables[0]+ChatFormatting.GRAY.toString());
                 } else if (this == Message.MESSAGE_ONLY_FEW_ARROWS_LEFT) {
                     text = text.replace("%arrows%", variables[0]);
+                } else if (this == Message.MESSAGE_BETA_NOTICE || this == Message.UPDATE_MESSAGE_BETA) {
+                    text = text.replace("%version%", Loader.instance().activeModContainer().getVersion());
                 }
             }
             if (text != null && (main.getConfigValues().getLanguage() == Language.HEBREW || main.getConfigValues().getLanguage() == Language.ARABIC)) {

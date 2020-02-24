@@ -121,6 +121,7 @@
     "openModFolder": "MODS FOLDER",
     "joinTheDiscord": "JOIN DISCORD",
     "update": {
+      "betaAvailable": "A new beta version (%version%) is available! You can download it from the beta tester section of the discord.",
       "majorAvailable": "A new major update (%version%) is available! The link for the download can be found in chat.",
       "patchAvailable": "A new patch update (%version%) is available! Look in chat for download options!",
       "downloading": "The patch is downloading! Status: %downloaded%/%total% Please note that after the download has finished, you must delete the old file.",
@@ -145,6 +146,7 @@
     "noArrowsLeft": "No Arrows Left!",
     "chooseAColor": "Choose a Color",
     "selectedColor": "Selected Color",
-    "setHexColor": "Set Hex Color"
+    "setHexColor": "Set Hex Color",
+    "betaNotice": "You are running a beta version: %version%. Please report any bugs that haven't been found yet. Thank you."
   }
 }

@@ -20,6 +20,7 @@ import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 
 import java.lang.reflect.Field;
@@ -33,10 +34,13 @@ public class SkyblockAddons {
     static final String MOD_ID = "skyblockaddons";
     public static final String MOD_NAME = "SkyblockAddons";
     public static final String VERSION = "1.5.0-b5";
-    public static final String UPDATE_JSON = "https://raw.githubusercontent.com/BiscuitDevelopment/SkyblockAddons/update-checker/resources/versions.json";
+    public static final String UPDATE_JSON = "https://raw.githubusercontent.com/BiscuitDevelopment/SkyblockAddons/update-checker/resources/beta-versions.json";
 
     /** The main instance of the mod, used mainly my mixins who don't get it passed to them. */
     @Getter private static SkyblockAddons instance;
+    /** SkyblockAddons' container in FML */
+    @Getter private static ModContainer container;
+    @Getter private static Logger logger;
 
     private ConfigValues configValues;
     private PersistentValues persistentValues;
@@ -58,6 +62,8 @@ public class SkyblockAddons {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent e) {
         instance = this;
+        container = Loader.instance().activeModContainer();
+        logger = e.getModLog();
         configValues = new ConfigValues(this, e.getSuggestedConfigurationFile());
         persistentValues = new PersistentValues(e.getSuggestedConfigurationFile());
     }

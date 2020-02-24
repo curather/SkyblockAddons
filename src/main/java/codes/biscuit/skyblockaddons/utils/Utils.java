@@ -29,10 +29,8 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.MetadataCollection;
 import net.minecraftforge.fml.common.ModMetadata;
-import net.minecraftforge.fml.common.versioning.ComparableVersion;
 import net.minecraftforge.fml.relauncher.CoreModManager;
 import net.minecraftforge.fml.relauncher.FMLInjectionData;
 import net.minecraftforge.fml.relauncher.FileListHelper;
@@ -60,6 +58,8 @@ public class Utils {
     /** Added to the beginning of messages. */
     private static final String MESSAGE_PREFIX =
             ChatFormatting.GRAY + "[" + ChatFormatting.AQUA + SkyblockAddons.MOD_NAME + ChatFormatting.GRAY + "] ";
+    private static final String MULTILINE_MESSAGE_HEADER = color("&7&m------------&7[&b&l SkyblockAddons &7]&7&m------------");
+    private static final String MULTILINE_MESSAGE_FOOTER = "color(\"&7&m----------------------------------------------\")";
 
     /** Enchantments listed by how good they are. May or may not be subjective lol. */
     private static final List<String> ORDERED_ENCHANTMENTS = Collections.unmodifiableList(Arrays.asList(
@@ -260,128 +260,30 @@ public class Utils {
     }
 
     public void checkUpdates() {
-        ForgeVersion.CheckResult checkResult = ForgeVersion.getResult(Loader.instance().activeModContainer());
-        FMLLog.info("%1$s", checkResult.toString());
+        ForgeVersion.CheckResult checkResult = ForgeVersion.getResult(SkyblockAddons.getContainer());
 
         if (checkResult.status.equals(ForgeVersion.Status.OUTDATED)) {
             main.getRenderListener().getDownloadInfo().setPatch(true);
             main.getRenderListener().getDownloadInfo().setMessageType(EnumUtils.UpdateMessageType.PATCH_AVAILABLE);
             sendUpdateMessage(true,true);
         }
-        else if (checkResult.status.equals(ForgeVersion.Status.BETA)) {
+        else if (checkResult.status.equals(ForgeVersion.Status.AHEAD) || checkResult.status.equals(ForgeVersion.Status.BETA)) {
             main.getRenderListener().getDownloadInfo().setMessageType(EnumUtils.UpdateMessageType.DEVELOPMENT);
         }
         else if (checkResult.status.equals(ForgeVersion.Status.BETA_OUTDATED)) {
-            // Show message for new beta available
+            main.getRenderListener().getDownloadInfo().setMessageType(EnumUtils.UpdateMessageType.DEVELOPMENT);
         }
         else if (checkResult.status.equals(ForgeVersion.Status.PENDING)) {
-            // Check again in a bit
+            main.getScheduler().schedule(Scheduler.CommandType.CHECK_FOR_UPDATES, 10);
         }
         else if (checkResult.status.equals(ForgeVersion.Status.FAILED)) {
-            sendErrorMessage("Update check failed!");
+            SkyblockAddons.getLogger().error("Update check failed!");
         }
-
-        new Thread(() -> {
-            try {
-                URL url = new URL("https://raw.githubusercontent.com/biscuut/SkyblockAddons/master/build.gradle");
-                URLConnection connection = url.openConnection();
-                connection.setReadTimeout(5000);
-                connection.addRequestProperty("User-Agent", "SkyblockAddons update checker");
-                connection.setDoOutput(true);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String currentLine;
-                String newestVersion = "";
-                while ((currentLine = reader.readLine()) != null) {
-                    if (currentLine.contains("version = \"")) {
-                        String[] newestVersionSplit = currentLine.split(Pattern.quote("version = \""));
-                        newestVersionSplit = newestVersionSplit[1].split(Pattern.quote("\""));
-                        newestVersion = newestVersionSplit[0];
-                        break;
-                    }
-                }
-                main.getRenderListener().getDownloadInfo().setNewestVersion(newestVersion);
-                reader.close();
-                List<Integer> newestVersionNumbers = new ArrayList<>();
-                List<Integer> thisVersionNumbers = new ArrayList<>();
-                try {
-                    for (String s : newestVersion.split(Pattern.quote("."))) {
-                        if (s.contains("-b")) {
-                            String[] splitBuild = s.split(Pattern.quote("-b"));
-                            newestVersionNumbers.add(Integer.parseInt(splitBuild[0]));
-                            newestVersionNumbers.add(Integer.parseInt(splitBuild[1]));
-                        } else {
-                            newestVersionNumbers.add(Integer.parseInt(s));
-                        }
-                    }
-                    for (String s : SkyblockAddons.VERSION.split(Pattern.quote("."))) {
-                        if (s.contains("-b")) {
-                            String[] splitBuild = s.split(Pattern.quote("-b"));
-                            thisVersionNumbers.add(Integer.parseInt(splitBuild[0]));
-                            thisVersionNumbers.add(Integer.parseInt(splitBuild[1]));
-                        } else {
-                            thisVersionNumbers.add(Integer.parseInt(s));
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    return;
-                }
-                for (int i = 0; i < 4; i++) {
-                    if (i >= newestVersionNumbers.size()) {
-                        newestVersionNumbers.add(i, 0);
-                    }
-                    if (i >= thisVersionNumbers.size()) {
-                        thisVersionNumbers.add(i, 0);
-                    }
-                }
-
-                boolean outOfBeta = newestVersionNumbers.get(1).equals(thisVersionNumbers.get(1)) &&
-                        newestVersionNumbers.get(2).equals(thisVersionNumbers.get(2)) && // Update message when either: the version numbers are the same, but its longer a build.
-                        newestVersionNumbers.get(3).equals(thisVersionNumbers.get(3)) && SkyblockAddons.VERSION.contains("b") && !newestVersion.contains("b");
-
-                for (int i = 0; i < 4; i++) {
-                    if (newestVersionNumbers.get(i) > thisVersionNumbers.get(i) || // OR: one of the version numbers is higher.
-                            outOfBeta) {
-                        String link = "https://hypixel.net/threads/forge-1-8-9-skyblockaddons-useful-features-for-skyblock.2109217/";
-                        try {
-                            url = new URL("https://raw.githubusercontent.com/biscuut/SkyblockAddons/master/updatelink.txt");
-                            connection = url.openConnection();
-                            connection.setReadTimeout(5000);
-                            connection.addRequestProperty("User-Agent", "SkyblockAddons");
-                            connection.setDoOutput(true);
-                            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                            while ((currentLine = reader.readLine()) != null) {
-                                link = currentLine;
-                            }
-                            reader.close();
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        } finally {
-                            main.getRenderListener().getDownloadInfo().setDownloadLink(link);
-                            if (i == 2 || i == 3 || outOfBeta) { // 0.0.x or 0.0.0-bx
-                                main.getRenderListener().getDownloadInfo().setPatch(true);
-                                main.getRenderListener().getDownloadInfo().setMessageType(EnumUtils.UpdateMessageType.PATCH_AVAILABLE);
-                                sendUpdateMessage(true,true);
-                            } else {
-                                main.getRenderListener().getDownloadInfo().setMessageType(EnumUtils.UpdateMessageType.MAJOR_AVAILABLE);
-                                sendUpdateMessage(true,false);
-                            }
-                        }
-                        break;
-                    } else if (thisVersionNumbers.get(i) > newestVersionNumbers.get(i)) {
-                        main.getRenderListener().getDownloadInfo().setMessageType(EnumUtils.UpdateMessageType.DEVELOPMENT);
-                        break;
-                    }
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }).start();
     }
 
     void sendUpdateMessage(boolean showDownload, boolean showAutoDownload) {
         String newestVersion = main.getRenderListener().getDownloadInfo().getNewestVersion();
-        sendMessage(color("&7&m------------&7[&b&l SkyblockAddons &7]&7&m------------"), false);
+        sendMessage(MULTILINE_MESSAGE_HEADER, false);
         if (main.getRenderListener().getDownloadInfo().getMessageType() == EnumUtils.UpdateMessageType.DOWNLOAD_FINISHED) {
             ChatComponentText deleteOldFile = new ChatComponentText(ChatFormatting.RED+Message.MESSAGE_DELETE_OLD_FILE.getMessage()+"\n");
             sendMessage(deleteOldFile, false);
@@ -415,7 +317,7 @@ public class Utils {
             discord.setChatStyle(discord.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/PqTAEek")));
             sendMessage(discord);
         }
-        sendMessage(color("&7&m----------------------------------------------"), false);
+        sendMessage(MULTILINE_MESSAGE_FOOTER, false);
     }
 
     public void checkDisabledFeatures() {
