@@ -27,9 +27,9 @@ public class DownloadInfo {
             main.getScheduler().schedule(Scheduler.CommandType.RESET_UPDATE_MESSAGE, 10, messageType);
         }
         if (messageType == EnumUtils.UpdateMessageType.FAILED) {
-            main.getUtils().sendUpdateMessage(true,false);
+            main.getUpdater().sendUpdateMessage(true,false);
         } else if (messageType == EnumUtils.UpdateMessageType.DOWNLOAD_FINISHED) {
-            main.getUtils().sendUpdateMessage(false, false);
+            main.getUpdater().sendUpdateMessage(false, false);
         }
     }
 }

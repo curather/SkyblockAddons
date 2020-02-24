@@ -75,12 +75,12 @@ public class SkyblockAddonsCommand extends CommandBase {
                     }
                     break;
                 case "update": // Not actually a command.
-                    if (main.getRenderListener().getDownloadInfo().isPatch())
-                        main.getUtils().downloadPatch(main.getRenderListener().getDownloadInfo().getNewestVersion());
+                    if (main.getUpdater().getDownloadInfo().isPatch())
+                        main.getUpdater().downloadPatch(main.getUpdater().getDownloadInfo().getNewestVersion());
                     break;
                 case "folder":
                     try {
-                        Desktop.getDesktop().open(main.getUtils().getSBAFolder(false));
+                        Desktop.getDesktop().open(main.getUtils().getSBAFolder());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

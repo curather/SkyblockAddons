@@ -33,8 +33,8 @@ public class SkyblockAddons {
 
     static final String MOD_ID = "skyblockaddons";
     public static final String MOD_NAME = "SkyblockAddons";
-    public static final String VERSION = "1.5.0-b5";
-    public static final String UPDATE_JSON = "https://raw.githubusercontent.com/BiscuitDevelopment/SkyblockAddons/update-checker/resources/beta-versions.json";
+    public static final String VERSION = "{version}";
+    public static final String UPDATE_JSON = "{updateJSON}";
 
     /** The main instance of the mod, used mainly my mixins who don't get it passed to them. */
     @Getter private static SkyblockAddons instance;
@@ -49,6 +49,7 @@ public class SkyblockAddons {
     private RenderListener renderListener = new RenderListener(this);
     private Utils utils = new Utils(this);
     private InventoryUtils inventoryUtils = new InventoryUtils(this);
+    private Updater updater = new Updater(this);
 
     /** Get the scheduler that be can be used to easily execute tasks. */
     private Scheduler scheduler = new Scheduler(this);

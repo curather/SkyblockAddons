@@ -49,8 +49,6 @@ public class RenderListener {
     @Getter @Setter private boolean predictHealth = false;
     @Getter @Setter private boolean predictMana = false;
 
-    @Getter private DownloadInfo downloadInfo;
-
     private Feature subtitleFeature = null;
     @Getter @Setter private Feature titleFeature = null;
 
@@ -70,7 +68,6 @@ public class RenderListener {
 
     public RenderListener(SkyblockAddons main) {
         this.main = main;
-        downloadInfo = new DownloadInfo(main);
     }
 
     /**
@@ -394,7 +391,9 @@ public class RenderListener {
     }
 
     private void drawUpdateMessage() {
+        DownloadInfo downloadInfo = main.getUpdater().getDownloadInfo();
         EnumUtils.UpdateMessageType messageType = downloadInfo.getMessageType();
+
         if (messageType != null) {
             Minecraft mc = Minecraft.getMinecraft();
             String[] textList;

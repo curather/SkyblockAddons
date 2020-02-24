@@ -3,6 +3,7 @@ package codes.biscuit.skyblockaddons.utils;
 import codes.biscuit.skyblockaddons.SkyblockAddons;
 import codes.biscuit.skyblockaddons.listeners.PlayerListener;
 import lombok.Getter;
+import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -106,7 +107,7 @@ public class Scheduler {
         RESET_UPDATE_MESSAGE,
         SET_LAST_SECOND_HEALTH,
         DELETE_RECENT_CHUNK,
-        CHECK_FOR_UPDATES;
+        CHECK_UPDATE_RESULTS;
 
         public void execute(Command command, int count) {
             SkyblockAddons main = SkyblockAddons.getInstance();
@@ -131,12 +132,12 @@ public class Scheduler {
             } else if (this == RESET_SUBTITLE_FEATURE) {
                 main.getRenderListener().setSubtitleFeature(null);
             } else if (this == RESET_UPDATE_MESSAGE) {
-                if (main.getRenderListener().getDownloadInfo().getMessageType() == commandData[0])
-                main.getRenderListener().getDownloadInfo().setMessageType(null);
+                if (main.getUpdater().getDownloadInfo().getMessageType() == commandData[0])
+                main.getUpdater().getDownloadInfo().setMessageType(null);
             } else if (this == SET_LAST_SECOND_HEALTH) {
                 main.getPlayerListener().setLastSecondHealth((int)commandData[0]);
-            } else if (this == CHECK_FOR_UPDATES) {
-                main.getUtils().checkUpdates();
+            } else if (this == CHECK_UPDATE_RESULTS) {
+                main.getUpdater().parseUpdateCheckResults();
             }
         }
     }

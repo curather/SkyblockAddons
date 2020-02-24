@@ -55,9 +55,6 @@ public class PlayerListener {
     private final Pattern COLLECTIONS_CHAT_PATTERN = Pattern.compile("§.\\+(?:§[0-9a-f])?([0-9.]+) §?[0-9a-f]?([A-Za-z]+) (\\([0-9.,]+/[0-9.,]+\\))");
     private final Set<String> randomMessages = new HashSet<>(Arrays.asList("I feel like I can fly!", "What was in that soup?", "Hmm… tasty!", "Hmm... tasty!", "You can now fly for 2 minutes.", "Your Magical Mushroom Soup flight has been extended for 2 extra minutes."));
 
-
-    private boolean sentUpdate = false;
-
     private long lastWorldJoin = -1;
     private long lastBoss = -1;
     private int magmaTick = 1;
@@ -293,17 +290,13 @@ public class PlayerListener {
                         if (getAttribute(Attribute.MANA) > getAttribute(Attribute.MAX_MANA))
                             setAttribute(Attribute.MANA, getAttribute(Attribute.MAX_MANA));
                     }
-                } else if (timerTick % 5 == 0) { // Check inventory, location, updates, and skeleton helmet every 1/4 second.
+                } else if (timerTick % 5 == 0) { // Check inventory, location, and skeleton helmet every 1/4 second.
                     EntityPlayerSP p = mc.thePlayer;
                     if (p != null) {
                         main.getUtils().checkGameLocationDate();
                         main.getInventoryUtils().checkIfInventoryIsFull(mc, p);
                         main.getInventoryUtils().checkIfWearingSkeletonHelmet(p);
                         main.getInventoryUtils().checkIfWearingRevenantArmor(p);
-                        if (!sentUpdate) {
-                            main.getUtils().checkUpdates();
-                            sentUpdate = true;
-                        }
 
                         if (mc.currentScreen == null && main.getConfigValues().isEnabled(Feature.ITEM_PICKUP_LOG)
                                 && main.getPlayerListener().didntRecentlyJoinWorld()) {

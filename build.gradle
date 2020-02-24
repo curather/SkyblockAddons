@@ -18,11 +18,6 @@ buildscript {
 apply plugin: 'io.franzbecker.gradle-lombok'
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.4.2" //remember don't update the version until its released
-group= "codes.biscuit.skyblockaddons"
-archivesBaseName = "SkyblockAddons"
-compileJava.options.encoding = 'UTF-8'
-
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
@@ -34,11 +29,17 @@ minecraft {
     runDir = "run"
 
     mappings = "stable_22"
+
+    // Choose the correct versions file for the update checker
+    def updateJSON = (project.version.toString().contains('b')) ? betaJSON : releaseJSON
+
+    // Replace placeholders in source code
+    replace("{version}": project.version, "{updateJSON}": updateJSON)
+    replaceIn("SkyblockAddons.java")
 }
 
 jar {
-//    archiveName = archivesBaseName + "-" + version + "-for-MC-1.8.9.jar"
-    archiveName = archivesBaseName + "-1.5.0-b5-for-MC-1.8.9.jar"
+    archiveName = archivesBaseName + "-" + version + "-for-MC-1.8.9.jar"
 
     manifest.attributes(
             'Main-Class': 'OpenErrorMessage',
