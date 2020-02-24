@@ -83,7 +83,10 @@ public class RenderListener {
                 } else {
                     renderTimersOnly();
                 }
-                drawUpdateMessage();
+
+                if (main.getUpdater().getMessage() != null && main.getUpdater().shouldDrawMessage()) {
+                    drawUpdateMessage();
+                }
             }
         }
     }
@@ -102,7 +105,10 @@ public class RenderListener {
             } else {
                 renderTimersOnly();
             }
-            drawUpdateMessage();
+
+            if (main.getUpdater().getMessage() != null && main.getUpdater().shouldDrawMessage()) {
+                drawUpdateMessage();
+            }
         }
     }
 
@@ -390,36 +396,40 @@ public class RenderListener {
         }
     }
 
-    private void drawUpdateMessage() {
-        DownloadInfo downloadInfo = main.getUpdater().getDownloadInfo();
-        EnumUtils.UpdateMessageType messageType = downloadInfo.getMessageType();
+    /**
+     * This renders a box at the top middle of the screen with the updater message in it
+     */
+    public void drawUpdateMessage() {
+        Minecraft mc = Minecraft.getMinecraft();
+        Updater updater = main.getUpdater();
+        Updater.UpdateMeta updateMeta = updater.getUpdateMeta();
+        Message updateMessage = updater.getMessage();
+        String[] textList;
 
-        if (messageType != null) {
-            Minecraft mc = Minecraft.getMinecraft();
-            String[] textList;
-            if (messageType == EnumUtils.UpdateMessageType.PATCH_AVAILABLE || messageType == EnumUtils.UpdateMessageType.MAJOR_AVAILABLE) {
-                textList = downloadInfo.getMessageType().getMessages(downloadInfo.getNewestVersion());
-            } else if (messageType == EnumUtils.UpdateMessageType.DOWNLOADING) {
-                textList = downloadInfo.getMessageType().getMessages(String.valueOf(downloadInfo.getDownloadedBytes()), String.valueOf(downloadInfo.getTotalBytes()));
-            } else if (messageType == EnumUtils.UpdateMessageType.DOWNLOAD_FINISHED) {
-                textList = downloadInfo.getMessageType().getMessages(downloadInfo.getOutputFileName());
-            } else {
-                textList = downloadInfo.getMessageType().getMessages();
-            }
-            int halfWidth = new ScaledResolution(mc).getScaledWidth() / 2;
-            Gui.drawRect(halfWidth - 110, 20, halfWidth + 110, 53 + textList.length * 10, main.getUtils().getDefaultBlue(140));
-            String text = "SkyblockAddons";
-            GlStateManager.pushMatrix();
-            float scale = 1.5F;
-            GlStateManager.scale(scale, scale, 1);
-            MinecraftReflection.FontRenderer.drawString(text, (int) (halfWidth / scale) - MinecraftReflection.FontRenderer.getStringWidth(text) / 2, (int) (30 / scale), ChatFormatting.WHITE);
-            GlStateManager.popMatrix();
-            int y = 45;
-            for (String line : textList) {
-                MinecraftReflection.FontRenderer.drawString(line, halfWidth - MinecraftReflection.FontRenderer.getStringWidth(line) / 2, y, ChatFormatting.WHITE);
-                y += 10;
-            }
+        if (updateMessage.equals(Message.UPDATE_MESSAGE_PATCH) || updateMessage.equals(Message.UPDATE_MESSAGE_MAJOR)) {
+            textList = updateMessage.getMessageForChat(updateMeta.getNewestVersion());
+        } else if (updateMessage.equals(Message.UPDATE_MESSAGE_DOWNLOAD)) {
+            textList = updateMessage.getMessageForChat(String.valueOf(updateMeta.getDownloadedBytes()), String.valueOf(updateMeta.getTotalBytes()));
+        } else if (updateMessage.equals(Message.UPDATE_MESSAGE_DOWNLOAD_FINISHED)) {
+            textList = updateMessage.getMessageForChat(updateMeta.getOutputFileName());
+        } else {
+            textList = updateMessage.getMessageForChat();
         }
+        int halfWidth = new ScaledResolution(mc).getScaledWidth() / 2;
+        Gui.drawRect(halfWidth - 110, 20, halfWidth + 110, 53 + textList.length * 10, main.getUtils().getDefaultBlue(140));
+        String title = SkyblockAddons.MOD_NAME;
+        GlStateManager.pushMatrix();
+        float scale = 1.5F;
+        GlStateManager.scale(scale, scale, 1);
+        MinecraftReflection.FontRenderer.drawString(title, (int) (halfWidth / scale) - MinecraftReflection.FontRenderer.getStringWidth(title) / 2, (int) (30 / scale), ChatFormatting.WHITE);
+        GlStateManager.popMatrix();
+        int y = 45;
+        for (String line : textList) {
+            MinecraftReflection.FontRenderer.drawString(line, halfWidth - MinecraftReflection.FontRenderer.getStringWidth(line) / 2, y, ChatFormatting.WHITE);
+            y += 10;
+        }
+        
+        updater.messageDrawn();
     }
 
     /**

@@ -5,6 +5,7 @@ import codes.biscuit.skyblockaddons.utils.nifty.ChatFormatting;
 import com.google.gson.JsonObject;
 import lombok.Getter;
 import net.minecraftforge.fml.common.Loader;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -118,20 +119,14 @@ public enum Message {
     MESSAGE_CLICK_MORE_TIMES(MessageObject.MESSAGES, "clickMoreTimes"),
     MESSAGE_CLICK_ONE_MORE_TIME(MessageObject.MESSAGES, "clickOneMoreTime"),
     MESSAGE_CANCELLED_CANE_BREAK(MessageObject.MESSAGES, "cancelledCaneBreak"),
-    MESSAGE_NEW_UPDATE(MessageObject.MESSAGES, "newUpdateAvailable"),
-    MESSAGE_VIEW_PATCH_NOTES(MessageObject.MESSAGES, "wantToViewPatchNotes"),
-    MESSAGE_DOWNLOAD_LINK(MessageObject.MESSAGES, "downloadLink"),
-    MESSAGE_DOWNLOAD_AUTOMATICALLY(MessageObject.MESSAGES, "downloadAutomatically"),
     MESSAGE_OPEN_MODS_FOLDER(MessageObject.MESSAGES, "openModFolder"),
     MESSAGE_JOIN_DISCORD(MessageObject.MESSAGES, "joinTheDiscord"),
-    MESSAGE_DELETE_OLD_FILE(MessageObject.MESSAGES, "deleteOldFile"),
     MESSAGE_FEATURE_DISABLED(MessageObject.MESSAGES, "featureDisabled"),
     MESSAGE_ANVIL_USES(MessageObject.MESSAGES, "anvilUses"),
     MESSAGE_CANCELLED_NON_ORES_BREAK(MessageObject.MESSAGES, "cancelledDeepCaverns"),
     MESSAGE_SPECIAL_ZEALOT_FOUND(MessageObject.MESSAGES, "specialZealotFound"),
     MESSAGE_BLOCK_INCOMPLETE_PATTERNS(MessageObject.MESSAGES, "blockIncompletePatterns"),
     MESSAGE_SEARCH_FEATURES(MessageObject.MESSAGES, "searchFeatures"),
-    MESSAGE_DOWNLOADING_UPDATE(MessageObject.MESSAGES, "downloadingUpdateFile"),
     MESSAGE_ONLY_FEW_ARROWS_LEFT(MessageObject.MESSAGES, "onlyFewArrowsLeft"),
     MESSAGE_NO_ARROWS_LEFT(MessageObject.MESSAGES, "noArrowsLeft"),
     MESSAGE_CHOOSE_A_COLOR(MessageObject.MESSAGES, "chooseAColor"),
@@ -145,6 +140,11 @@ public enum Message {
     @Deprecated ANCHOR_POINT_BOTTOM_RIGHT(MessageObject.ANCHOR_POINT, "bottomRight"),
     @Deprecated ANCHOR_POINT_HEALTH_BAR(MessageObject.ANCHOR_POINT, "healthBar"),
 
+    // Updater messages
+    MESSAGE_NEW_UPDATE(MessageObject.UPDATE_MESSAGES, "newUpdateAvailable"),
+    MESSAGE_VIEW_PATCH_NOTES(MessageObject.UPDATE_MESSAGES, "wantToViewPatchNotes"),
+    MESSAGE_DOWNLOAD_LINK(MessageObject.UPDATE_MESSAGES, "downloadLink"),
+    MESSAGE_DOWNLOAD_AUTOMATICALLY(MessageObject.UPDATE_MESSAGES, "downloadAutomatically"),
     UPDATE_MESSAGE_BETA(MessageObject.UPDATE_MESSAGES, "betaAvailable"),
     UPDATE_MESSAGE_MAJOR(MessageObject.UPDATE_MESSAGES, "majorAvailable"),
     UPDATE_MESSAGE_PATCH(MessageObject.UPDATE_MESSAGES, "patchAvailable"),
@@ -225,6 +225,19 @@ public enum Message {
             text = memberName;
         }
         return text;
+    }
+
+    /**
+     * Gets the message with word wrapping for the chat window
+     *
+     * @param variables replacement string(s) for the message's placeholders
+     * @return the message as
+     */
+    public String[] getMessageForChat(String... variables) {
+        String messageString = getMessage(variables);
+
+        // Wrap around the text, replace the carriage returns, and split at the new lines.
+        return WordUtils.wrap(messageString, 36).replace("\r", "").split(Pattern.quote("\n"));
     }
 
     @Getter
