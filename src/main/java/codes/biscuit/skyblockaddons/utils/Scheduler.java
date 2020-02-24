@@ -105,7 +105,8 @@ public class Scheduler {
         RESET_SUBTITLE_FEATURE,
         RESET_UPDATE_MESSAGE,
         SET_LAST_SECOND_HEALTH,
-        DELETE_RECENT_CHUNK;
+        DELETE_RECENT_CHUNK,
+        CHECK_FOR_UPDATES;
 
         public void execute(Command command, int count) {
             SkyblockAddons main = SkyblockAddons.getInstance();
@@ -134,6 +135,8 @@ public class Scheduler {
                 main.getRenderListener().getDownloadInfo().setMessageType(null);
             } else if (this == SET_LAST_SECOND_HEALTH) {
                 main.getPlayerListener().setLastSecondHealth((int)commandData[0]);
+            } else if (this == CHECK_FOR_UPDATES) {
+                main.getUtils().checkUpdates();
             }
         }
     }
