@@ -33,6 +33,7 @@ public class SkyblockAddons {
 
     static final String MOD_ID = "skyblockaddons";
     public static final String MOD_NAME = "SkyblockAddons";
+    // FIXME these placeholders don't work at runtime
     public static final String VERSION = "{version}";
     public static final String UPDATE_JSON = "{updateJSON}";
 

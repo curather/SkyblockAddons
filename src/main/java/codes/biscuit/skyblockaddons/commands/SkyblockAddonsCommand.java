@@ -75,8 +75,8 @@ public class SkyblockAddonsCommand extends CommandBase {
                     }
                     break;
                 case "update": // Not actually a command.
-                    if (main.getUpdater().getDownloadInfo().isPatch())
-                        main.getUpdater().downloadPatch(main.getUpdater().getDownloadInfo().getNewestVersion());
+                    if (main.getUpdater().getUpdateMeta().isPatch())
+                        main.getUpdater().downloadPatch(main.getUpdater().getUpdateMeta().getNewestVersion());
                     break;
                 case "folder":
                     try {

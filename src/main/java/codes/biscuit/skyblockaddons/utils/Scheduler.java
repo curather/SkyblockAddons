@@ -132,8 +132,7 @@ public class Scheduler {
             } else if (this == RESET_SUBTITLE_FEATURE) {
                 main.getRenderListener().setSubtitleFeature(null);
             } else if (this == RESET_UPDATE_MESSAGE) {
-                if (main.getUpdater().getDownloadInfo().getMessageType() == commandData[0])
-                main.getUpdater().getDownloadInfo().setMessageType(null);
+                main.getUpdater().resetMessage();
             } else if (this == SET_LAST_SECOND_HEALTH) {
                 main.getPlayerListener().setLastSecondHealth((int)commandData[0]);
             } else if (this == CHECK_UPDATE_RESULTS) {

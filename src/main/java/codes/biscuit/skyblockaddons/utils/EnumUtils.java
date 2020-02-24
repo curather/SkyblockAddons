@@ -327,28 +327,6 @@ public class EnumUtils {
         }
     }
 
-    public enum UpdateMessageType {
-        MAJOR_AVAILABLE(UPDATE_MESSAGE_MAJOR),
-        PATCH_AVAILABLE(UPDATE_MESSAGE_PATCH),
-        DOWNLOADING(UPDATE_MESSAGE_DOWNLOAD),
-        FAILED(UPDATE_MESSAGE_FAILED),
-        DOWNLOAD_FINISHED(UPDATE_MESSAGE_DOWNLOAD_FINISHED),
-        DEVELOPMENT(MESSAGE_BETA_NOTICE);
-
-        private Message message;
-
-        UpdateMessageType(Message message) {
-            this.message = message;
-        }
-
-        public String[] getMessages(String... variables) {
-            String messageText = message.getMessage(variables);
-
-            // Wrap around the text, replace the carriage returns, and split at the new lines.
-            return WordUtils.wrap(messageText, 36).replace("\r", "").split(Pattern.quote("\n"));
-        }
-    }
-
     public enum SkillType {
         FARMING("Farming", Items.golden_hoe),
         MINING("Mining", Items.diamond_pickaxe),
