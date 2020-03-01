@@ -498,7 +498,7 @@ public class Utils {
     }
 
     public File getSBAFolder() {
-        return SkyblockAddons.getContainer().getSource().getParentFile();
+        return main.getContainer().getSource().getParentFile();
     }
 
     public int getNBTInteger(ItemStack item, String... path) {
