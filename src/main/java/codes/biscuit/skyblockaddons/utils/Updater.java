@@ -33,7 +33,7 @@ public class Updater {
     public Updater(SkyblockAddons sba) {
         this.sba = sba;
         updateMeta = new UpdateMeta();
-        this.logger = SkyblockAddons.getLogger();
+        this.logger = sba.getLogger();
     }
 
     /**
@@ -60,10 +60,10 @@ public class Updater {
      * Reads the results of the update check from the Forge Update Checker
      */
     public void parseUpdateCheckResults() {
-        ForgeVersion.CheckResult checkResult = ForgeVersion.getResult(SkyblockAddons.getContainer());
+        ForgeVersion.CheckResult checkResult = ForgeVersion.getResult(sba.getContainer());
 
         if (checkResult.status.equals(ForgeVersion.Status.OUTDATED)) {
-            String[] currentVersion = SkyblockAddons.getContainer().getVersion().split(".");
+            String[] currentVersion = sba.getContainer().getVersion().split(".");
             String[] newestVersion = checkResult.target.toString().split(".");
 
             // Is this a major update or a patch?

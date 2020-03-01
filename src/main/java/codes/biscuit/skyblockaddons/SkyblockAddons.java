@@ -33,15 +33,14 @@ public class SkyblockAddons {
 
     static final String MOD_ID = "skyblockaddons";
     public static final String MOD_NAME = "SkyblockAddons";
-    // FIXME these placeholders don't work at runtime
     public static final String VERSION = "{version}";
     public static final String UPDATE_JSON = "{updateJSON}";
 
     /** The main instance of the mod, used mainly my mixins who don't get it passed to them. */
     @Getter private static SkyblockAddons instance;
     /** SkyblockAddons' container in FML */
-    @Getter private static ModContainer container;
-    @Getter private static Logger logger;
+    private ModContainer container;
+    private Logger logger;
 
     private ConfigValues configValues;
     private PersistentValues persistentValues;
