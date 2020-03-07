@@ -77,6 +77,10 @@ processResources {
     }
 }
 
+/*
+ If you're using IntelliJ IDEA, make sure to run this task before running Minecraft in your dev environment
+ or the mod assets won't load.
+ */
 // Copies mod resources to the development environment
 task processResourcesDev(type: Copy) {
     // replace stuff in mcmod.info, nothing else
