@@ -431,6 +431,9 @@ public class Utils {
             if (progressString.contains("k")) progress *= 1000;
             if (totalString.contains("k")) total *= 1000;
 
+            if (progressString.contains("m")) progress *= 1000000;
+            if (totalString.contains("m")) total *= 1000000;
+
             float completion = progress/total;
 
             if (completion > 0.85) {
